@@ -27,12 +27,8 @@ const char on_msg[7] = "led on";
 const char off_msg[8] = "led off";
 
 ros::Subscriber<std_msgs::String> sub("arduino", remoteControl_cb);
-
 std_msgs::String return_msg;
 ros::Publisher chatter("chatter", &return_msg);
-
-// sub.getNumPublishers() const;
-// chatter.getNumSubscribers() const;
 
 void remoteControl () {
     if (command == 'q') {
@@ -44,8 +40,7 @@ void remoteControl () {
         turnOffLight();
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    
+    } 
 }
 
 void setup() {
