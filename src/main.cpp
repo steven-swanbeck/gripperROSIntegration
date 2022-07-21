@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#define USE_USBCON
+
 // ROS dependencies
 #include <stdlib.h> 
 #include <ros.h>
