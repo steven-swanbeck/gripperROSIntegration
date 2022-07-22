@@ -63,36 +63,12 @@ const float gear_ratio = 29.861;
 //////////////////////////////////////////////////////////////////////////
 // Ros remote control callback function
 char command {};
-char macroCommand {};
-int motorSelectionCommand {};
-int motorSetpointCommand {};
-char command2 {};
-char command3 {};
-char command4 {};
-char command5 {};
 
 int concat(int num1, int num2);
 
 void remoteControl_cb(const std_msgs::String& cmd_msg) { 
     // command = cmd_msg.data[1];
-    macroCommand = cmd_msg.data[0];
-    if (macroCommand == 'm') {
-        command2 = cmd_msg.data[1];
-        command3 = cmd_msg.data[2];
-        command4 = cmd_msg.data[3];
-        command5 = cmd_msg.data[4];
-        int command2int = command2 - 48;//'0';
-        int command3int = command3 - 48;//'0';
-        int command4int = command4 - '0';
-        int command5int = command5 - '0';
-        motorSelectionCommand = concat(command2int, command3int);
-        motorSetpointCommand = concat(command4int, command5int);
-    } 
-}
-
-int concat(int num1, int num2) {
-    int cat = num1 * 10 + num2;
-    return cat;
+    command = cmd_msg.data[0];
 }
 
 // ROS subscriber and publisher declarations
@@ -105,9 +81,8 @@ ros::Publisher chatter("chatter", &return_msg);
 void resetHand();
 void cutPower();
 void restorePower();
-void selectMacro(char macroCommand);
-void selectMotor(int motorSelectionCommand);
-void selectSetpoint(int motorSetpointCommand, bool setAll = false);
+void selectMacro(char command);
+void assumeGrasp();
 
 // Other function prototypes
 float getMotorTurns(int motorNumber);
@@ -135,18 +110,17 @@ void setup() {
 // Loop
 void loop() {
     arduinoNode.spinOnce();
-    selectMacro(macroCommand);
+    selectMacro(command);
     actuateMotors();
     delay(10);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Remote control function
-void selectMacro(char macroCommand) {
-    switch (macroCommand) {
-        case 'm':
-            selectMotor(motorSelectionCommand);
-            // selectSetpoint(motorSetpointCommand);
+void selectMacro(char command) {
+    switch (command) {
+        case 'g':
+            assumeGrasp();
             break;
         case 'r':
             resetHand();
@@ -160,119 +134,17 @@ void selectMacro(char macroCommand) {
     }
 }
 
-void selectMotor(int motorSelectionCommand){
-    if (command == 0){
-        motorNumber = 0;
-        const char off_msg[17] = "selected motor 0";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 1){
-        motorNumber = 1;
-        const char off_msg[17] = "selected motor 1";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 2){
-        motorNumber = 2;
-        const char off_msg[17] = "selected motor 2";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 3){
-        motorNumber = 3;
-        const char off_msg[17] = "selected motor 3";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 4){
-        motorNumber = 4;
-        const char off_msg[17] = "selected motor 4";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 5){
-        motorNumber = 5;
-        const char off_msg[17] = "selected motor 5";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 6){
-        motorNumber = 6;
-        const char off_msg[17] = "selected motor 6";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 7){
-        motorNumber = 7;
-        const char off_msg[17] = "selected motor 7";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 8){
-        motorNumber = 8;
-        const char off_msg[17] = "selected motor 8";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 9){
-        motorNumber = 9;
-        const char off_msg[17] = "selected motor 9";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 10){
-        motorNumber = 10;
-        const char off_msg[18] = "selected motor 10";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == 11){
-        motorNumber = 11;
-        const char off_msg[18] = "selected motor 11";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand);
-    } else if (command == -110) {
-        motorNumber = 12;
-        const char off_msg[20] = "selected all motors";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-        selectSetpoint(motorSetpointCommand, true);
-    } else if (command == -33) {
-        // keep previous motor number
-        selectSetpoint(motorSetpointCommand);
-    } else {
-        const char off_msg[14] = "unknown motor";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
+void assumeGrasp() {
+    // r[0] = 10.0;
+    // r[1] = 10.0;
+    // r[2] = 10.0;
+    // r[3] = 10.0;
+    for (int i = 0; i < num_motors; i++) {
+        r[i] = 8.0;
     }
-}
-
-void selectSetpoint(int motorSetpointCommand, bool setAll) {
-    // //verify no conflict with set bounds
-    // if (motorSetpointCommand > maxMotorTurns) {
-    //     motorSetpointCommand = maxMotorTurns;
-    //     const char off_msg[58] = "motor setpoint exceeded maximum value; reset to max turns";
-    //     return_msg.data = off_msg;
-    //     chatter.publish(&return_msg);
-    // } else if (motorSetpointCommand < minMotorTurns) {
-    //     motorSetpointCommand = minMotorTurns;
-    //     const char off_msg[55] = "motor setpoint below minimum value; reset to min turns";
-    //     return_msg.data = off_msg;
-    //     chatter.publish(&return_msg);
-    // }
-    //check to set all motors or just one
-    if (setAll == true) {
-        for (int i = 0; i < num_motors; i++) {
-            r[i] = motorSetpointCommand;
-        }
-    } else {
-        r[motorNumber] = motorSetpointCommand;
-    }
-    // const char off_msg[20] = "motor setpoints set";
-    // return_msg.data = off_msg;
-    // chatter.publish(&return_msg);
+    const char off_msg[28] = "preprogrammed grasp assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
 }
 
 void resetHand(){
