@@ -2,12 +2,17 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define USE_USBCON
+#define USE_USBCON // *** MUST BE UN-COMMENTED FOR USE WITH ARDUINO DUE***
 
 // ROS dependencies
 #include <stdlib.h> 
 #include <ros.h>
 #include <std_msgs/String.h>
+
+// #include <string.h> // *** cstd string class fails to recognize ***
+// #include <cstring>
+// #include <iostream>
+// #include <string>
 
 // Other dependencies
 #include <QuadratureEncoder.h>
@@ -58,8 +63,36 @@ const float gear_ratio = 29.861;
 //////////////////////////////////////////////////////////////////////////
 // Ros remote control callback function
 char command {};
+char macroCommand {};
+int motorSelectionCommand {};
+int motorSetpointCommand {};
+char command2 {};
+char command3 {};
+char command4 {};
+char command5 {};
+
+int concat(int num1, int num2);
+
 void remoteControl_cb(const std_msgs::String& cmd_msg) { 
-    command = cmd_msg.data[1];
+    // command = cmd_msg.data[1];
+    macroCommand = cmd_msg.data[0];
+    if (macroCommand == 'm') {
+        command2 = cmd_msg.data[1];
+        command3 = cmd_msg.data[2];
+        command4 = cmd_msg.data[3];
+        command5 = cmd_msg.data[4];
+        int command2int = command2 - 48;//'0';
+        int command3int = command3 - 48;//'0';
+        int command4int = command4 - '0';
+        int command5int = command5 - '0';
+        motorSelectionCommand = concat(command2int, command3int);
+        motorSetpointCommand = concat(command4int, command5int);
+    } 
+}
+
+int concat(int num1, int num2) {
+    int cat = num1 * 10 + num2;
+    return cat;
 }
 
 // ROS subscriber and publisher declarations
@@ -69,17 +102,12 @@ ros::Publisher chatter("chatter", &return_msg);
 
 //////////////////////////////////////////////////////////////////////////
 // RC function prototypes
-int selectMotor(char command);
-float incrementTurns(int motorNumber);
-float decrementTurns(int motorNumber);
-void incrementAll();
-void decrementAll();
 void resetHand();
 void cutPower();
 void restorePower();
-void drive1s(int motorNumber);
-void drive1sReverse(int motorNumber);
-void remoteControl();
+void selectMacro(char macroCommand);
+void selectMotor(int motorSelectionCommand);
+void selectSetpoint(int motorSetpointCommand, bool setAll = false);
 
 // Other function prototypes
 float getMotorTurns(int motorNumber);
@@ -107,219 +135,167 @@ void setup() {
 // Loop
 void loop() {
     arduinoNode.spinOnce();
-    remoteControl();
+    selectMacro(macroCommand);
     actuateMotors();
     delay(10);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Remote control function
-void remoteControl() {
-    if (command == '=' || command == '1' || command == '2' || command == '3' || command == '4' || command == '5' || command == '6' || command == '7' || command == '8' || command == '9' || command == '0' || command == '-') {
-        selectMotor(command);
-    }
-    else if (command == 'q') {
-        incrementTurns(motorNumber);
-        const char on_msg[30] = "increase selected motor turns";
-        return_msg.data = on_msg;
-        chatter.publish(&return_msg);
-    } 
-    else if (command == 'a') {
-        decrementTurns(motorNumber);
-        const char off_msg[30] = "decrease selected motor turns";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == '.') {
-        incrementAll();
-        const char off_msg[25] = "increase all motor turns";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == ',') {
-        decrementAll();
-        const char off_msg[25] = "decrease all motor turns";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == 'r') {
-        resetHand();
-        const char off_msg[22] = "reset all motor turns";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == 'x') {
-        cutPower();
-        const char off_msg[10] = "power cut";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == 'z') {
-        restorePower();
-        const char off_msg[15] = "power restored";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == 'm') {
-        drive1s(motorNumber);
-        const char off_msg[25] = "selected motor driven 1s";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
-    }
-    else if (command == 'n') {
-        drive1sReverse(motorNumber);
-        const char off_msg[33] = "selected motor driven reverse 1s";
-        return_msg.data = off_msg;
-        chatter.publish(&return_msg);
+void selectMacro(char macroCommand) {
+    switch (macroCommand) {
+        case 'm':
+            selectMotor(motorSelectionCommand);
+            // selectSetpoint(motorSetpointCommand);
+            break;
+        case 'r':
+            resetHand();
+            break;
+        case 'x':
+            cutPower();
+            break;
+        case 'z':
+            restorePower();
+            break;
     }
 }
 
-int selectMotor(char command){
-    if (command == '='){
+void selectMotor(int motorSelectionCommand){
+    if (command == 0){
         motorNumber = 0;
         const char off_msg[17] = "selected motor 0";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '1'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 1){
         motorNumber = 1;
         const char off_msg[17] = "selected motor 1";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '2'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 2){
         motorNumber = 2;
         const char off_msg[17] = "selected motor 2";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '3'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 3){
         motorNumber = 3;
         const char off_msg[17] = "selected motor 3";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '4'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 4){
         motorNumber = 4;
         const char off_msg[17] = "selected motor 4";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '5'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 5){
         motorNumber = 5;
         const char off_msg[17] = "selected motor 5";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '6'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 6){
         motorNumber = 6;
         const char off_msg[17] = "selected motor 6";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '7'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 7){
         motorNumber = 7;
         const char off_msg[17] = "selected motor 7";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '8'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 8){
         motorNumber = 8;
         const char off_msg[17] = "selected motor 8";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '9'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 9){
         motorNumber = 9;
         const char off_msg[17] = "selected motor 9";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '0'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 10){
         motorNumber = 10;
         const char off_msg[18] = "selected motor 10";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
-    }
-    else if (command == '-'){
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == 11){
         motorNumber = 11;
         const char off_msg[18] = "selected motor 11";
         return_msg.data = off_msg;
         chatter.publish(&return_msg);
+        selectSetpoint(motorSetpointCommand);
+    } else if (command == -110) {
+        motorNumber = 12;
+        const char off_msg[20] = "selected all motors";
+        return_msg.data = off_msg;
+        chatter.publish(&return_msg);
+        selectSetpoint(motorSetpointCommand, true);
+    } else if (command == -33) {
+        // keep previous motor number
+        selectSetpoint(motorSetpointCommand);
+    } else {
+        const char off_msg[14] = "unknown motor";
+        return_msg.data = off_msg;
+        chatter.publish(&return_msg);
     }
-    return motorNumber;
 }
 
-float incrementTurns(int motorNumber){
-    float motorIncrement = (maxMotorTurns - minMotorTurns) / maxMotorSteps;
-    r[motorNumber] = r[motorNumber] + motorIncrement;
-    if (r[motorNumber] > maxMotorTurns){
-        r[motorNumber] = maxMotorTurns;
-    }
-    return r[motorNumber];
-}
-
-float decrementTurns(int motorNumber){
-    float motorIncrement = (maxMotorTurns - minMotorTurns) / maxMotorSteps;
-    r[motorNumber] = r[motorNumber] - motorIncrement;
-    if (r[motorNumber] < minMotorTurns){
-        r[motorNumber] = minMotorTurns;
-    }
-    return r[motorNumber];
-}
-
-void incrementAll(){
-    float motorIncrement = (maxMotorTurns - minMotorTurns) / maxMotorSteps;
-    for (int i = 0; i < num_motors; i++){
-        r[i] = r[i] + motorIncrement;
-        if (r[i] > maxMotorTurns){
-            r[i] = maxMotorTurns;
+void selectSetpoint(int motorSetpointCommand, bool setAll) {
+    // //verify no conflict with set bounds
+    // if (motorSetpointCommand > maxMotorTurns) {
+    //     motorSetpointCommand = maxMotorTurns;
+    //     const char off_msg[58] = "motor setpoint exceeded maximum value; reset to max turns";
+    //     return_msg.data = off_msg;
+    //     chatter.publish(&return_msg);
+    // } else if (motorSetpointCommand < minMotorTurns) {
+    //     motorSetpointCommand = minMotorTurns;
+    //     const char off_msg[55] = "motor setpoint below minimum value; reset to min turns";
+    //     return_msg.data = off_msg;
+    //     chatter.publish(&return_msg);
+    // }
+    //check to set all motors or just one
+    if (setAll == true) {
+        for (int i = 0; i < num_motors; i++) {
+            r[i] = motorSetpointCommand;
         }
+    } else {
+        r[motorNumber] = motorSetpointCommand;
     }
-}
-
-void decrementAll(){
-    float motorIncrement = (maxMotorTurns - minMotorTurns) / maxMotorSteps;
-    for (int i = 0; i < num_motors; i++){
-        r[i] = r[i] - motorIncrement;
-        if (r[i] < minMotorTurns){
-            r[i] = minMotorTurns;
-        }
-    }
+    // const char off_msg[20] = "motor setpoints set";
+    // return_msg.data = off_msg;
+    // chatter.publish(&return_msg);
 }
 
 void resetHand(){
     for (int i = 0; i < num_motors; i++){
         r[i] = rInit[i];
-    } 
+    }
+    const char off_msg[11] = "hand reset";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
 }
 
 void cutPower() {
     digitalWrite(relay, LOW);
+    const char off_msg[10] = "power cut";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
 }
 
 void restorePower() {
     digitalWrite(relay, HIGH);
-}
-
-void drive1s(int motorNumber){
-    float timer1s = millis();
-    while (millis() - timer1s < 100){
-        digitalWrite(dir[motorNumber],HIGH);
-        analogWrite(pwm[motorNumber],255);
-    } 
-    analogWrite(pwm[motorNumber],0);
-    digitalWrite(dir[motorNumber],LOW);
-}
-
-void drive1sReverse(int motorNumber){
-    float timer1s = millis();
-    while (millis() - timer1s < 100){
-        digitalWrite(dir[motorNumber],LOW);
-        analogWrite(pwm[motorNumber],255);
-    } 
-    analogWrite(pwm[motorNumber],0);
-    digitalWrite(dir[motorNumber],LOW);
+    const char off_msg[15] = "power restored";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
 }
 
 // This function allows us to get the current motor angle of each motor
