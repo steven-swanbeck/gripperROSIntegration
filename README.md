@@ -2,7 +2,7 @@
 
 ## Acknowledgment
 This repository was created for the Smart Robotics Lab at the University of Nevada, Reno.
-It is the companion repository to https://github.com/steven-swanbeck/ur3ehand.
+It is the companion repository to https://github.com/steven-swanbeck/ROS_ur3ehand.
 ---
 
 ## Purpose
@@ -43,4 +43,4 @@ rostopic echo /chatter
 ```
 ---
 ## Integration with UR3e
-For full details of the integration of the gripper with the UR3e manipulator, view this repository's [companion repository](https://github.com/steven-swanbeck/ur3ehand).
+For full details of the integration of the gripper with the UR3e manipulator, view this repository's [companion repository](https://github.com/steven-swanbeck/ROS_ur3ehand).
