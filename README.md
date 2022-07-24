@@ -1,4 +1,4 @@
-Code for to allow University of Nevada, Reno Smart Robotics Lab's TSA-Driven Soft Robotic Hand interface with ROS. 
+PlatformIO Arduino code for to allow University of Nevada, Reno Smart Robotics Lab's TSA-Driven Soft Robotic Hand interface with ROS. 
 
 The experimental branch shows efforts to parse long-form messages to control inidivual motors, their setpoints, and trigger macro commands. 
 
