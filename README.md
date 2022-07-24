@@ -1,5 +1,10 @@
 # ROS Integration for TSA-Driven Soft Gripper
 
+## Acknowledgment
+This repository was created for the Smart Robotics Lab at the University of Nevada, Reno.
+It is the companion repository to https://github.com/steven-swanbeck/ur3ehand.
+---
+
 ## Purpose
 PlatformIO Arduino code to allow the University of Nevada, Reno Smart Robotics Lab's TSA-Driven Soft Robotic Hand to send and receive ROS messages for external control. 
 
@@ -18,6 +23,7 @@ and the rosserial client library for Arduino, which can be installed to the targ
 ```console
 git clone https://github.com/ros-drivers/rosserial.git
 ```
+---
 ## General Use
 Once configured, a rosserial Python node can be launched using:
 ```console
@@ -35,5 +41,6 @@ Callback messages from the Arduino can be seen using:
 ```console
 rostopic echo /chatter
 ```
+---
 ## Integration with UR3e
-For full details of the integration of the gripper with the UR3e manipulator, view https://github.com/steven-swanbeck/ur3ehand.
+For full details of the integration of the gripper with the UR3e manipulator, view this repository's [companion repository](https://github.com/steven-swanbeck/ur3ehand).
