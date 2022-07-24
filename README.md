@@ -6,5 +6,5 @@ The pickplacePoC branch shows simplified, non-complex messaging in which message
 
 Messages can be sent to the Arduino via ROS in the form:
 ```console
-:~$ rostopic pub arduino std_msgs/String <command>
+rostopic pub arduino std_msgs/String <command>
 ```
