@@ -9,11 +9,6 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 
-// #include <string.h> // *** cstd string class fails to recognize ***
-// #include <cstring>
-// #include <iostream>
-// #include <string>
-
 // Other dependencies
 #include <QuadratureEncoder.h>
 
