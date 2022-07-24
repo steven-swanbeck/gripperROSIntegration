@@ -12,3 +12,11 @@ Callback messages from the Arduino can be seen using:
 ```console
 rostopic echo /chatter
 ```
+Use of this code requires installation of the ROSserial packages, which can be installed with:
+```console
+sudo apt install ros-<distro>-rosserial ros-<distro>-rosserial-arduino ros-<distro>-rosserial-python
+```
+and the rosserial client library for Arduino, which can be installed with:
+```console
+git clone https://github.com/ros-drivers/rosserial.git
+```
