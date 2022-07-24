@@ -36,4 +36,4 @@ Callback messages from the Arduino can be seen using:
 rostopic echo /chatter
 ```
 ## Integration with UR3e
-For full details of the integration of the gripper with the UR3e manipulator, view: https://github.com/steven-swanbeck/ur3ehand
+For full details of the integration of the gripper with the UR3e manipulator, view https://github.com/steven-swanbeck/ur3ehand.
