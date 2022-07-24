@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-// #define USE_USBCON // *** MUST BE UN-COMMENTED FOR USE WITH ARDUINO DUE***
+#define USE_USBCON // *** MUST BE UN-COMMENTED FOR USE WITH ARDUINO DUE***
 
 // ROS dependencies
 #include <stdlib.h> 
