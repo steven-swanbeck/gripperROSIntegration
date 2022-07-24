@@ -4,14 +4,6 @@ The experimental branch shows efforts to parse long-form messages to control ini
 
 The pickplacePoC branch shows simplified, non-complex messaging in which messages consist of a single character sent via ROS to trigger exclusively high-level commands for purpose of a basic pick-and-place demonstration using the hand mounted to a Universal Robots UR3e manipulator.
 
-Messages can be sent to the Arduino via ROS in the form:
-```console
-rostopic pub arduino std_msgs/String <command>
-```
-Callback messages from the Arduino can be seen using:
-```console
-rostopic echo /chatter
-```
 Use of this code requires installation of the ROSserial packages, which can be installed with:
 ```console
 sudo apt install ros-<distro>-rosserial ros-<distro>-rosserial-arduino ros-<distro>-rosserial-python
@@ -27,4 +19,12 @@ rosrun rosserial_python serial_node.py <port_name>
 In general, this will be:
 ```console
 rosrun rosserial_python serial_node.py /dev/ttyACM0
+```
+Messages can be sent to the Arduino via ROS in the form:
+```console
+rostopic pub arduino std_msgs/String <command>
+```
+Callback messages from the Arduino can be seen using:
+```console
+rostopic echo /chatter
 ```
