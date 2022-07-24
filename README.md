@@ -8,3 +8,7 @@ Messages can be sent to the Arduino via ROS in the form:
 ```console
 rostopic pub arduino std_msgs/String <command>
 ```
+Callback messages from the Arduino can be seen using:
+```console
+rostopic echo /chatter
+```
