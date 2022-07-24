@@ -1,6 +1,8 @@
 # ROS Integration for TSA-Driven Soft Gripper
 
 ## Purpose
+<img height="500" alt="Universal Robots A/S" src="/include/SoftGripper.jpg" align="left">
+
 PlatformIO Arduino code to allow the University of Nevada, Reno Smart Robotics Lab's TSA-Driven Soft Robotic Hand to send and receive ROS messages for external control. 
 
 The experimental branch shows efforts to parse long-form messages to control individual motors, their setpoints, and trigger macro commands. 
@@ -8,7 +10,6 @@ The experimental branch shows efforts to parse long-form messages to control ind
 The pickplacePoC branch shows simplified, non-complex messaging in which messages consist of a single character sent via ROS to trigger exclusively high-level commands for purpose of a basic pick-and-place demonstration using the hand mounted to a Universal Robots UR3e manipulator.
 
 ![image of hand mounted to ur3e manipulator](/include/SoftGripper.jpg "Soft Gripper")
-<img height="300" alt="Universal Robots A/S" src="/include/SoftGripper.jpg">
 
 ## Dependencies
 Use of this code requires installation of the ROSserial packages, which can be installed with:
