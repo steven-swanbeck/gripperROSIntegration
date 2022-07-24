@@ -16,7 +16,7 @@ Use of this code requires installation of the ROSserial packages, which can be i
 ```console
 sudo apt install ros-<distro>-rosserial ros-<distro>-rosserial-arduino ros-<distro>-rosserial-python
 ```
-and the rosserial client library for Arduino, which can be installed with:
+and the rosserial client library for Arduino, which can be installed to the target directory with:
 ```console
 git clone https://github.com/ros-drivers/rosserial.git
 ```
