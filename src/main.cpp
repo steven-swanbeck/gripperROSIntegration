@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define USE_USBCON // *** MUST BE UN-COMMENTED FOR USE WITH ARDUINO DUE***
+// #define USE_USBCON // *** MUST BE UN-COMMENTED FOR USE WITH ARDUINO DUE***
 
 // ROS dependencies
 #include <stdlib.h> 
@@ -62,7 +62,6 @@ char command {};
 int concat(int num1, int num2);
 
 void remoteControl_cb(const std_msgs::String& cmd_msg) { 
-    // command = cmd_msg.data[1];
     command = cmd_msg.data[0];
 }
 
@@ -94,7 +93,7 @@ void setup() {
         pinMode(dir[i], OUTPUT);
     }
     pinMode(relay, OUTPUT);
-    digitalWrite(relay, HIGH);
+    digitalWrite(relay, LOW);
 
     // Setting up ROS communication
     arduinoNode.initNode();
@@ -130,10 +129,6 @@ void selectMacro(char command) {
 }
 
 void assumeGrasp() {
-    // r[0] = 10.0;
-    // r[1] = 10.0;
-    // r[2] = 10.0;
-    // r[3] = 10.0;
     for (int i = 0; i < num_motors; i++) {
         r[i] = 8.0;
     }
