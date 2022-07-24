@@ -1,7 +1,7 @@
 # ROS Integration for TSA-Driven Soft Gripper
 
 ## Purpose
-<img height="500" alt="Universal Robots A/S" src="/include/SoftGripper.jpg" align="left">
+<img height="750" alt="Universal Robots A/S" src="/include/SoftGripper.jpg" align="left">
 
 PlatformIO Arduino code to allow the University of Nevada, Reno Smart Robotics Lab's TSA-Driven Soft Robotic Hand to send and receive ROS messages for external control. 
 
