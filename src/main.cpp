@@ -50,7 +50,7 @@ float y[num_motors] {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f
 float e[num_motors] {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}; // error signal
 float v[num_motors] {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}; // voltage input
 float v_pwm[num_motors] {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}; // voltage (pwm) input
-float Kp[num_motors] {100,100,100,100,100,100,100,100,100,100,100,100}; // proportional gain
+float Kp[num_motors] {50,50,50,50,50,50,50,50,50,50,50,50}; // proportional gain
 
 const int cpr = 12;
 const float gear_ratio = 29.861;
@@ -129,9 +129,33 @@ void selectMacro(char command) {
 }
 
 void assumeGrasp() {
-    for (int i = 0; i < num_motors; i++) {
-        r[i] = 8.0;
-    }
+    // for (int i = 0; i < num_motors; i++) {
+    //     r[i] = 8.0;
+    // }
+    // r[0] = 8.0;
+    // r[1] = 8.0;
+    // r[2] = 8.0;
+    // r[3] = 8.0;
+    // r[4] = 8.0;
+
+    r[4] = 10.0;
+    r[5] = 10.0;
+    r[7] = 12.0;
+    r[9] = 12.0;
+    r[11] = 10.0;
+
+    // r[10] = 17.0;
+    // r[0] = 16.0;
+    // r[1] = 18.0;
+    // r[2] = 18.0;
+    // r[3] = 19.0;
+
+    r[10] = 17.0;
+    r[0] = 16.0;
+    r[1] = 18.0;
+    r[2] = 21.0;
+    r[3] = 21.0;
+
     const char off_msg[28] = "preprogrammed grasp assumed";
     return_msg.data = off_msg;
     chatter.publish(&return_msg); 
