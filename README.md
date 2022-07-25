@@ -23,7 +23,8 @@ and the rosserial client library for Arduino, which can be installed to the targ
 ```console
 git clone https://github.com/ros-drivers/rosserial.git
 ```
----
+**Note: The roslib Arduino library is already included in the 'lib' folder in this repo**
+***
 ## General Use
 Once configured, a rosserial Python node can be launched using:
 ```console
