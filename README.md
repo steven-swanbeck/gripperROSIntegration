@@ -2,7 +2,7 @@
 
 ## Acknowledgment
 This repository was created for the Smart Robotics Lab at the University of Nevada, Reno.
-It is the companion repository to https://github.com/steven-swanbeck/ROS_ur3ehand.
+It is the companion repository to [ROS_ur3ehand](https://github.com/steven-swanbeck/ROS_ur3ehand).
 ---
 
 ## Purpose
