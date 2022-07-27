@@ -78,6 +78,15 @@ void restorePower();
 void selectMacro(char command);
 void assumeGrasp();
 
+void handshake();
+void fist();
+void pinkieOut();
+void pinkieClosed();
+void snap();
+void fingerGun();
+void peace();
+void rockPaperScissors();
+
 // Other function prototypes
 float getMotorTurns(int motorNumber);
 bool sgn(float x, int motorNumber);
@@ -124,6 +133,30 @@ void selectMacro(char command) {
             break;
         case 'z':
             restorePower();
+            break;
+        case 'h':
+            handshake();
+            break;
+        case 'f':
+            fist();
+            break;
+        case 'm':
+            pinkieOut();
+            break;
+        case 'n':
+            pinkieClosed();
+            break;
+        case 's':
+            snap();
+            break;
+        case 'j':
+            fingerGun();
+            break;
+        case 'p':
+            peace();
+            break;
+        case 'k':
+            rockPaperScissors();
             break;
     }
 }
@@ -180,6 +213,132 @@ void cutPower() {
 void restorePower() {
     digitalWrite(relay, HIGH);
     const char off_msg[15] = "power restored";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+
+// additional hand positions for handshake
+void handshake() {
+    r[4] = 8.0;
+    r[5] = 8.0;
+    r[7] = 9.0;
+    r[9] = 10.0;
+    r[11] = 10.0;
+
+    r[10] = 11.0;
+    r[0] = 12.0;
+    r[1] = 13.0;
+    r[2] = 14.0;
+    r[3] = 15.0;
+
+    const char off_msg[18] = "handshake assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void fist() {
+    r[4] = 10.0;
+    r[5] = 10.0;
+    r[7] = 10.0;
+    r[9] = 10.0;
+    r[11] = 10.0;
+
+    r[10] = 13.0;
+    r[0] = 14.0;
+    r[1] = 16.0;
+    r[2] = 18.0;
+    r[3] = 18.0;
+
+    const char off_msg[13] = "fist assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void pinkieOut() {
+    r[4] = 0.0;
+    r[5] = 10.0;
+    r[7] = 10.0;
+    r[9] = 10.0;
+    r[11] = 10.0;
+
+    r[10] = 13.0;
+    r[0] = 14.0;
+    r[1] = 16.0;
+    r[2] = 18.0;
+    r[3] = 0.0;
+
+    const char off_msg[19] = "pinkie out assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void pinkieClosed() {
+    r[4] = 8.0;
+    r[5] = 10.0;
+    r[7] = 10.0;
+    r[9] = 10.0;
+    r[11] = 10.0;
+
+    r[10] = 13.0;
+    r[0] = 14.0;
+    r[1] = 16.0;
+    r[2] = 18.0;
+    r[3] = 10.0;
+
+    const char off_msg[22] = "pinkie closed assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void snap() {
+    r[4] = 10.0;
+    r[5] = 10.0;
+    r[7] = 10.0;
+    r[9] = 10.0;
+    r[11] = 10.0;
+
+    r[10] = 0.0;
+    r[0] = 0.0;
+    r[1] = 0.0;
+    r[2] = 18.0;
+    r[3] = 18.0;
+
+    const char off_msg[13] = "snap assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void fingerGun() {
+    r[4] = 0.0;
+    r[5] = 10.0;
+    r[7] = 10.0;
+    r[9] = 0.0;
+    r[11] = 10.0;
+
+    r[10] = 0.0;
+    r[0] = 0.0;
+    r[1] = 16.0;
+    r[2] = 18.0;
+    r[3] = 18.0;
+
+    const char off_msg[19] = "finger gun assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void peace() {
+    r[4] = 10.0;
+    r[5] = 10.0;
+    r[7] = 0.0;
+    r[9] = 0.0;
+    r[11] = 10.0;
+
+    r[10] = 13.0;
+    r[0] = 0.0;
+    r[1] = 0.0;
+    r[2] = 18.0;
+    r[3] = 18.0;
+
+    const char off_msg[14] = "peace assumed";
+    return_msg.data = off_msg;
+    chatter.publish(&return_msg); 
+}
+void rockPaperScissors() {
+    const char off_msg[12] = "rock thrown";
     return_msg.data = off_msg;
     chatter.publish(&return_msg); 
 }
