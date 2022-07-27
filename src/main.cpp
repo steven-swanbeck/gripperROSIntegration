@@ -104,6 +104,9 @@ void setup() {
     pinMode(relay, OUTPUT);
     digitalWrite(relay, LOW);
 
+    // Seeding RNG
+    randomSeed(analogRead(0));
+
     // Setting up ROS communication
     arduinoNode.initNode();
     arduinoNode.advertise(chatter);
@@ -219,32 +222,32 @@ void restorePower() {
 
 // additional hand positions for handshake
 void handshake() {
-    r[4] = 8.0;
-    r[5] = 8.0;
+    r[4] = 10.0;
+    r[5] = 10.0;
     r[7] = 9.0;
-    r[9] = 10.0;
+    r[9] = 8.0;
     r[11] = 10.0;
 
-    r[10] = 11.0;
-    r[0] = 12.0;
-    r[1] = 13.0;
-    r[2] = 14.0;
-    r[3] = 15.0;
+    r[10] = 16.0;
+    r[0] = 10.0;
+    r[1] = 15.0;
+    r[2] = 16.0;
+    r[3] = 17.0;
 
     const char off_msg[18] = "handshake assumed";
     return_msg.data = off_msg;
     chatter.publish(&return_msg); 
 }
 void fist() {
-    r[4] = 10.0;
-    r[5] = 10.0;
-    r[7] = 10.0;
-    r[9] = 10.0;
-    r[11] = 10.0;
+    r[4] = 12.0;
+    r[5] = 12.0;
+    r[7] = 12.0;
+    r[9] = 12.0;
+    r[11] = 12.0;
 
-    r[10] = 13.0;
-    r[0] = 14.0;
-    r[1] = 16.0;
+    r[10] = 18.0;
+    r[0] = 18.0;
+    r[1] = 18.0;
     r[2] = 18.0;
     r[3] = 18.0;
 
@@ -254,14 +257,14 @@ void fist() {
 }
 void pinkieOut() {
     r[4] = 0.0;
-    r[5] = 10.0;
-    r[7] = 10.0;
-    r[9] = 10.0;
-    r[11] = 10.0;
+    r[5] = 12.0;
+    r[7] = 12.0;
+    r[9] = 12.0;
+    r[11] = 12.0;
 
-    r[10] = 13.0;
-    r[0] = 14.0;
-    r[1] = 16.0;
+    r[10] = 18.0;
+    r[0] = 18.0;
+    r[1] = 18.0;
     r[2] = 18.0;
     r[3] = 0.0;
 
@@ -271,14 +274,14 @@ void pinkieOut() {
 }
 void pinkieClosed() {
     r[4] = 8.0;
-    r[5] = 10.0;
-    r[7] = 10.0;
-    r[9] = 10.0;
-    r[11] = 10.0;
+    r[5] = 12.0;
+    r[7] = 12.0;
+    r[9] = 12.0;
+    r[11] = 12.0;
 
-    r[10] = 13.0;
-    r[0] = 14.0;
-    r[1] = 16.0;
+    r[10] = 18.0;
+    r[0] = 18.0;
+    r[1] = 18.0;
     r[2] = 18.0;
     r[3] = 10.0;
 
@@ -287,11 +290,11 @@ void pinkieClosed() {
     chatter.publish(&return_msg); 
 }
 void snap() {
-    r[4] = 10.0;
-    r[5] = 10.0;
-    r[7] = 10.0;
-    r[9] = 10.0;
-    r[11] = 10.0;
+    r[4] = 12.0;
+    r[5] = 12.0;
+    r[7] = 12.0;
+    r[9] = 12.0;
+    r[11] = 12.0;
 
     r[10] = 0.0;
     r[0] = 0.0;
@@ -304,15 +307,15 @@ void snap() {
     chatter.publish(&return_msg); 
 }
 void fingerGun() {
-    r[4] = 0.0;
+    r[4] = 10.0;
     r[5] = 10.0;
     r[7] = 10.0;
     r[9] = 0.0;
-    r[11] = 10.0;
+    r[11] = 0.0;
 
     r[10] = 0.0;
     r[0] = 0.0;
-    r[1] = 16.0;
+    r[1] = 18.0;
     r[2] = 18.0;
     r[3] = 18.0;
 
@@ -327,7 +330,7 @@ void peace() {
     r[9] = 0.0;
     r[11] = 10.0;
 
-    r[10] = 13.0;
+    r[10] = 18.0;
     r[0] = 0.0;
     r[1] = 0.0;
     r[2] = 18.0;
@@ -338,7 +341,20 @@ void peace() {
     chatter.publish(&return_msg); 
 }
 void rockPaperScissors() {
-    const char off_msg[12] = "rock thrown";
+    int sign = random(1,4);
+    if (sign == 1) {
+        fist();
+    }
+    else if (sign == 2) {
+        resetHand();
+    }
+    else if (sign == 3) {
+        peace();
+    }
+    else if (sign == 4) {
+        fingerGun();
+    }
+    const char off_msg[12] = "sign chosen";
     return_msg.data = off_msg;
     chatter.publish(&return_msg); 
 }
