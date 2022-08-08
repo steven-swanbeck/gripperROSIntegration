@@ -45,3 +45,13 @@ rostopic echo /chatter
 ---
 ## Integration with UR3e
 For full details of the integration of the gripper with the UR3e manipulator, view this repository's [companion repository](https://github.com/steven-swanbeck/ROS_ur3ehand).
+---
+## Troubleshooting
+If ROS informs the user that permission to access a port is denied, try running:
+```console
+sudo chmod a+rw <port_name>
+```
+ex:
+```console
+sudo chmod a+rw /dev/ttyACM0
+```
